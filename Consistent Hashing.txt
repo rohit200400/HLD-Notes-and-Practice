@@ -1,0 +1,35 @@
+How DNS works?
+	We human could not remember the IP address of any device so we use words like google.com, mit.edu, etc.
+	The Domain name system(DNS) brings this two together.
+	
+	As soon as we typed a new address in the browser it checks its cache for associated IP address
+	If not found it checks if it is saved in the Operating System(OS).
+	If not found it checks with the Resolver which is usually the Internet Service Provider(ISP).
+	The Resolver asks the Root Server.
+	The root server knows where to locate the .COM TLD(Top-Level Domain) server. 
+		This root server is just one of the 13 root name servers that exist today.
+		Root servers sit at the top of the DNS hierarchy. They are scattered around the globe and operated by 12 independent organisations.They are named [letter].root-servers.net where [letter] ranges from A to M.
+	The coordination of most top-level domains (TLDs) belong to the Internet Corporation for Assigned Names and Numbers (ICANN)
+	.COM TLD server point to the authoritative name servers.
+	The TDL registry have the domain name and authoritative servers.
+	
+Why do we naeed HTTPS?
+	Privacy, integrity and identification are the main reasons why HTTPS is important.
+
+Encryption:
+	Symmetric key encryption. a key is used to scramble the message and mix the key with message. The messagecan olly be decrypted using the same key used for encryption. It is difficult to share the key here.
+	Asymmetric key encription: private and public key. public key is shown to everyone.
+	But private key is kept secret. It is easy to mantain privacy and also the identity as the data encrypted by a particular users public key can only be decrypted by his private key.
+	
+IP(Internet Protocol) 
+
+Consistent Hashing:
+1> we will hash the input data to a huge number.
+2> We will create number of hash functions and pass all the server names to the hash functions. This will give n different position of a single server.
+3> we will save the data to next server.	
+4> eg. input will be hashed and obtained value is 7.
+5> this data will be added to the to server whose hash value is immediately greater than the hashvalue of data.
+
+for fail saftey there is a replica of each database. This replica is used durind data migration and fail saftey.
+
+this is used to avoid cascading failure. and easy scale up and scale doun.
