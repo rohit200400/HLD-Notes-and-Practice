@@ -23,7 +23,7 @@ Encryption:
 	
 IP(Internet Protocol) 
 
-Consistent Hashing:
+Consistent Hashing / Multiple Hashing:
 1> we will hash the input data to a huge number.
 2> We will create number of hash functions and pass all the server names to the hash functions. This will give n different position of a single server.
 3> we will save the data to next server.	
@@ -32,4 +32,48 @@ Consistent Hashing:
 
 for fail saftey there is a replica of each database. This replica is used durind data migration and fail saftey.
 
-this is used to avoid cascading failure. and easy scale up and scale doun.
+this is used to avoid cascading failure. and easy scale up and scale down.
+
+Why should we have seperate app server and DB server?
+>> Seperate server provides better Saclability. combined server on the same Machine provides faster data access.
+>> Individual Scaling is not possible
+>> Highly coupled hence if app server goes down DB also goes down.
+>> Fewer resources available since sharing the same resources.
+
+> The client connects the app server via load balancer. So whenever we are deploying in one of the server we first need to do is Deregister the server then deploy the code then Register it again.
+
+
+Caching:: 
+	Caching is a system design concept that involves storing frequently accessed data in a location that is easily and quickly accessible.
+	Cache Update || Cache eviction/ invalidation
+	>> TTL ( Time to Live)
+Types of Caching:
+1. In Broeser Cache (SQLite) Can save HTML, JS, CSS, Images, Videos, Metadata, Url-IP
+2. CDN (Content Delivery Network) - Akamai, Cloudfare, Fastly, Cloudfront(AWS)
+	CDN companies have their servers distributed across the globe. To get the big files faster the CDN companies keep the copy in each server. Once we ask for the file, they do anycast() which gives the file from the nearest datacentre or the one which can give the data fastest.
+3. Local Caching
+	This can be done inside the VM Using HashMap or other means.
+	Consistency can be a problem but its solvable.
+	Faster but limited storage.
+4. Global Caching
+	This can be done in a seperate Machine where all the App Server contact.
+	All the App servers are clling the same cache server.
+	SPOF(Single point of Failure), Slower
+	Easier to update, High Storage
+	There are number of companies providing Cache as a service.(AWS, Hazelcast, Cloudfare, etc)
+	
+Cache Eviction:
+When cache is full we have to remove some items from cache.
+There are multiple algorithm for doing the same:
+	LILO, LIFO, LRU, LFU, etc
+
+Cache Inconsistency / invalid:
+When cache data is stale or inconsistent, i.e. cache data != database data.
+To avoid the cache inconsistency we have 3 techniques:
+	1. Write through Cache ( highly consistent,  writes are slow)
+		Here whenever client updates data we first update it in Cache then Database.
+		All this is done in a single transaction. Used in read heavy system eg. Social Media posts, Ecommerce cataloge, banking systems.
+	2. Write back Cache: (Fast writes, but if cache fails actual data is lost)
+		Here the client persist the data in cache and cache asynchronously persists the data in the database. If the cache fail before updating then this might lead to data loss.
+	3. Write arround cache: (performance Dips, inconsistency, slow writes, no data loss)
+		writes are directly done in database and cache syncs with the databse at regular intervals
